@@ -1,8 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Trainer Registration",
-  description: "Register as a trainer",
+  title: 'Trainer Registration',
+  description: 'Register as a trainer',
 };
 
 export default function RootLayout({
