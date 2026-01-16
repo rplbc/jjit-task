@@ -527,3 +527,5 @@ next-env.d.ts
 
 #  Dotnet tools
 dotnet-tools.json
+
+!.env.example
