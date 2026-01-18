@@ -1,4 +1,5 @@
 using System.Text.Json;
+using PokemonApi.Models;
 
 namespace PokemonApi.Services;
 
@@ -20,8 +21,12 @@ public class PokemonCatalog : IPokemonCatalog
         });
 
         var pokemon = payload?.Data ?? throw new InvalidOperationException("pokemon.json is missing the data array.");
-        Names = pokemon.Select(pokemon => pokemon.Name).ToArray();
+        var summaries = pokemon.Select(pokemon => new PokemonSummary(pokemon.Id, pokemon.Name)).ToArray();
+        Names = summaries.Select(pokemon => pokemon.Name).ToArray();
+        PokemonByName = summaries.ToDictionary(pokemon => pokemon.Name, StringComparer.OrdinalIgnoreCase);
     }
+
+    public IReadOnlyDictionary<string, PokemonSummary> PokemonByName { get; }
 
     public IReadOnlyList<string> Names { get; }
 

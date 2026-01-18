@@ -20,7 +20,10 @@ const trainerFormSchema = z.object({
     })
     .min(16, 'Required range from 16-99')
     .max(99, 'Required range from 16-99'),
-  pokemonName: z.string().min(1, 'Choose something'),
+  pokemon: z.object({
+    id: z.number().int().positive('Choose something'),
+    name: z.string().min(1, 'Choose something'),
+  }),
 });
 
 export function TrainerRegistrationForm() {
@@ -28,7 +31,7 @@ export function TrainerRegistrationForm() {
     defaultValues: {
       trainerName: '',
       trainerAge: '' as string | number,
-      pokemonName: '',
+      pokemon: { id: 0, name: '' },
     },
     validators: {
       onChange: trainerFormSchema,
@@ -39,7 +42,7 @@ export function TrainerRegistrationForm() {
       const r = await trainerApi.register({
         name: data.trainerName,
         age: data.trainerAge,
-        pokemon: data.pokemonName,
+        pokemon: data.pokemon.name,
       });
 
       if (!r.ok) throw new Error('Failed to register trainer');
@@ -72,12 +75,12 @@ export function TrainerRegistrationForm() {
           </Grid2>
         </Grid2>
 
-        <form.AppField name="pokemonName">
+        <form.AppField name="pokemon">
           {(field) => <field.PokemonAutocomplete label="Pokemon name" placeholder="Choose" />}
         </form.AppField>
 
-        <form.Subscribe selector={(state) => state.values.pokemonName}>
-          {(pokemonName) => <PokemonDetails pokemonName={pokemonName} />}
+        <form.Subscribe selector={(state) => state.values.pokemon}>
+          {(pokemon) => <PokemonDetails pokemonId={pokemon.id > 0 ? pokemon.id : null} />}
         </form.Subscribe>
 
         <form.ActionButtons />

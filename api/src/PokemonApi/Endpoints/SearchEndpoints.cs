@@ -1,5 +1,6 @@
 using FuzzySharp;
 using Microsoft.AspNetCore.Mvc;
+using PokemonApi.Models;
 using PokemonApi.Services;
 using System.ComponentModel.DataAnnotations;
 
@@ -13,7 +14,7 @@ public static class SearchEndpoints
             .MapGet("/search", Search)
             .WithName("SearchPokemon")
             .WithSummary("Search for Pokemon by name using fuzzy matching")
-            .Produces(StatusCodes.Status200OK, typeof(string[]))
+            .Produces(StatusCodes.Status200OK, typeof(PokemonSummary[]))
             .ProducesProblem(StatusCodes.Status400BadRequest);
 
         return group;
@@ -27,7 +28,9 @@ public static class SearchEndpoints
         var matches = Process.ExtractTop(trimmedQuery, catalog.Names, limit: 10);
         var results = matches
             .Where(match => match.Score >= 70)
-            .Select(match => match.Value)
+            .Select(match => catalog.PokemonByName.TryGetValue(match.Value, out var pokemon) ? pokemon : null)
+            .Where(pokemon => pokemon is not null)
+            .Select(pokemon => pokemon!)
             .ToArray();
 
         return TypedResults.Ok(results);

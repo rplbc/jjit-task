@@ -87,11 +87,11 @@ const SpriteImg = styled('img')({
 });
 
 type PokemonDetailsProps = {
-  pokemonName?: string;
+  pokemonId?: number | null;
 };
 
-export function PokemonDetails({ pokemonName }: PokemonDetailsProps) {
-  const { data: details, isLoading } = usePokemonDetailsQuery(pokemonName);
+export function PokemonDetails({ pokemonId }: PokemonDetailsProps) {
+  const { data: details, isLoading } = usePokemonDetailsQuery(pokemonId);
 
   if (isLoading)
     return (
