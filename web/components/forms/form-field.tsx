@@ -1,11 +1,10 @@
 import { FormControl, FormHelperText, FormLabel } from '@mui/material';
-import type { ReactNode } from 'react';
 
 type FormFieldProps = {
   label: string;
   htmlFor: string;
   helperText?: React.ReactNode;
-  children: ReactNode;
+  children: React.ReactNode;
 } & React.ComponentProps<typeof FormControl>;
 
 export function FormField({ label, htmlFor, children, helperText, ...props }: FormFieldProps) {

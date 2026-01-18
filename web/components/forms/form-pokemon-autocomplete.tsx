@@ -4,7 +4,8 @@ import { Autocomplete, CircularProgress, OutlinedInput, type TextFieldProps } fr
 import { useId, useState } from 'react';
 
 import { useFieldContext } from '@/hooks/form-context';
-import { useDebouncedPokemonSearchQuery } from '../../hooks/use-pokemon-search-query';
+import { useDebouncedPokemonSearchQuery } from '@/hooks/use-pokemon-search-query';
+
 import { FormField } from './form-field';
 
 type FormPokemonAutocompleteProps = {
@@ -23,8 +24,7 @@ export function FormPokemonAutocomplete({
   const [inputValue, setInputValue] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const {
-    data: pokemonData,
-    isLoading: pokemonLoading,
+    query: { data: pokemonData, isLoading: pokemonLoading },
     isDebouncing,
   } = useDebouncedPokemonSearchQuery(searchValue);
 

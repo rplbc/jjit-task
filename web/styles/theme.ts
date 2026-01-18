@@ -1,15 +1,16 @@
 import { createTheme } from '@mui/material/styles';
+
 import { MuiAutocomplete } from './overrides/autocomplete';
 import { MuiButton } from './overrides/button';
 import { MuiButtonBase } from './overrides/button-base';
 import { MuiChip } from './overrides/chip';
+import { MuiDialog } from './overrides/dialog';
 import { MuiFormHelperText } from './overrides/form-helper-text';
 import { MuiFormLabel } from './overrides/form-label';
 import { MuiInputBase } from './overrides/input-base';
-import { MuiOutlinedInput } from './overrides/outlined-input';
-import { MuiDialog } from './overrides/dialog';
-import { MuiPaper } from './overrides/paper';
 import { MuiModal } from './overrides/modal';
+import { MuiOutlinedInput } from './overrides/outlined-input';
+import { MuiPaper } from './overrides/paper';
 
 declare module '@mui/material/Button' {
   interface ButtonPropsVariantOverrides {

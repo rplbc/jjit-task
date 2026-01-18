@@ -1,4 +1,5 @@
-import { Web437Font } from '../styles/fonts';
+import { Web437Font } from '@/styles/fonts';
+
 import { Providers } from './_components/providers';
 
 export default function RootLayout({ children }: React.PropsWithChildren) {

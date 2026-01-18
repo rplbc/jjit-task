@@ -1,5 +1,6 @@
 import { useDebouncedValue } from '@tanstack/react-pacer/debouncer';
 import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query';
+
 import { pokemonApi } from '../lib/api/pokemon';
 
 export function usePokemonSearchQuery(pokemonName: string | null | undefined) {
@@ -30,7 +31,7 @@ export function useDebouncedPokemonSearchQuery(pokemonName: string | null | unde
   });
 
   return {
-    ...query,
+    query,
     isDebouncing: !hasCache && debouncer.state.isPending,
   };
 }

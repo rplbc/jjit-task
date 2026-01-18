@@ -1,11 +1,12 @@
-import * as React from 'react';
 import type { Components, Theme } from '@mui/material/styles';
-import { ChevronDownIcon } from '../../components/icons/chevron-down';
+import { createElement } from 'react';
+
+import { ChevronDownIcon } from '@/components/icons/chevron-down';
 
 export const MuiAutocomplete: Components<Theme>['MuiAutocomplete'] = {
   defaultProps: {
     disableClearable: true,
-    popupIcon: React.createElement(ChevronDownIcon, {
+    popupIcon: createElement(ChevronDownIcon, {
       width: 20,
       height: 20,
       style: { color: 'inherit' },

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { systemApi } from '@/lib/api/system';
+
 import { NewTrainerRegistration } from './_components/new-trainer-registration';
 
 export const dynamic = 'force-dynamic';

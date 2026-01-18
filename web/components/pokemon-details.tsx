@@ -1,8 +1,9 @@
 'use client';
 
-import { usePokemonDetailsQuery } from '@/hooks/use-pokemon-details';
 import { Box, Chip, Paper, Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
+
+import { usePokemonDetailsQuery } from '@/hooks/use-pokemon-details';
 
 const Container = styled(Paper)(({ theme }) => ({
   borderColor: theme.palette.grey[300],

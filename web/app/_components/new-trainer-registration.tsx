@@ -1,7 +1,8 @@
 'use client';
 
-import { TrainerRegistrationForm } from '@/components/trainer-registration-form';
 import { Paper, Stack, Typography } from '@mui/material';
+
+import { TrainerRegistrationForm } from '@/components/trainer-registration-form';
 
 type NewTrainerRegistrationProps = {
   date: React.ReactNode;
