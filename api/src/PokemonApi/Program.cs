@@ -5,6 +5,8 @@ using Scalar.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<INtpService, NtpService>();
+builder.Services.AddSingleton<IPokemonCatalog, PokemonCatalog>();
+builder.Services.AddValidation();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 
@@ -23,6 +25,8 @@ else
     );
 }
 
-app.MapGroup("/api").WithTags("Ntp").MapTimeEndpoints();
+var apiGroup = app.MapGroup("/api");
+apiGroup.WithTags("Ntp").MapTimeEndpoints();
+apiGroup.WithTags("Pokemon").MapSearchEndpoints();
 
 app.Run();
