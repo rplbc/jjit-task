@@ -1,18 +1,12 @@
-import type { Metadata } from 'next';
+import { Web437Font } from '../styles/fonts';
+import { Providers } from './_components/providers';
 
-export const metadata: Metadata = {
-  title: 'Trainer Registration',
-  description: 'Register as a trainer',
-};
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: React.PropsWithChildren) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="en" className={Web437Font.variable}>
+      <body>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
