@@ -2,10 +2,11 @@
 
 import { Paper, Stack, Typography } from '@mui/material';
 
+import { FormattedDate } from '@/components/formatted-date';
 import { TrainerRegistrationForm } from '@/components/trainer-registration-form';
 
 type NewTrainerRegistrationProps = {
-  date: React.ReactNode;
+  date?: string | null;
 };
 
 export function NewTrainerRegistration({ date }: NewTrainerRegistrationProps) {
@@ -20,7 +21,11 @@ export function NewTrainerRegistration({ date }: NewTrainerRegistrationProps) {
       }}
     >
       <Stack spacing={3}>
-        {date ? <Typography align="right">{date}</Typography> : null}
+        {date ? (
+          <Typography align="right">
+            <FormattedDate>{date}</FormattedDate>
+          </Typography>
+        ) : null}
         <TrainerRegistrationForm />
       </Stack>
     </Paper>
