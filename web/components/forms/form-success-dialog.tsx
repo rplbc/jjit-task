@@ -27,7 +27,7 @@ export function FormSuccessDialog() {
           }}
         >
           <Stack justifyContent="center" alignItems="center" textAlign="center" spacing={1}>
-            <DialogTitle id="form-success-title">Success!</DialogTitle>
+            <DialogTitle id="form-success-title">Sukces!</DialogTitle>
             <DialogActions>
               <Button
                 variant="contained"

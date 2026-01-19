@@ -43,5 +43,6 @@ var apiGroup = app.MapGroup("/api");
 apiGroup.WithTags("Ntp").MapTimeEndpoints();
 apiGroup.WithTags("Pokemon").MapSearchEndpoints();
 apiGroup.WithTags("Pokemon").MapPokemonEndpoints();
+apiGroup.WithTags("Trainer").MapTrainerEndpoints();
 
 app.Run();

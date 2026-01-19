@@ -1,5 +1,5 @@
 import { apiClient } from '../api-client';
-import type { PokemonDetails, PokemonSummary } from '../types';
+import type { PokemonDetails, PokemonSummary } from '../schema/pokemon';
 
 export const pokemonApi = {
   searchByName: (q: string) =>

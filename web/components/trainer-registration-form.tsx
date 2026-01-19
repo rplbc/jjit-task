@@ -2,39 +2,27 @@
 
 import { Stack } from '@mui/material';
 import Grid2 from '@mui/material/Grid2';
-import { z } from 'zod';
 
-import { trainerApi } from '../lib/api/trainer';
+import { trainerApi } from '@/lib/api/trainer';
+import { type PokemonSummary } from '@/lib/schema/pokemon';
+import { trainerFormSchema } from '@/lib/schema/trainer';
 
 import { useAppForm } from './forms/app-form';
 import { PokemonDetails } from './pokemon-details';
-
-const trainerFormSchema = z.object({
-  trainerName: z
-    .string()
-    .min(2, 'Required from 2 to 20 symbols')
-    .max(20, 'Required from 2 to 20 symbols'),
-  trainerAge: z.coerce
-    .number({
-      invalid_type_error: 'Required range from 16-99',
-    })
-    .min(16, 'Required range from 16-99')
-    .max(99, 'Required range from 16-99'),
-  pokemon: z.object({
-    id: z.number().int().positive('Choose something'),
-    name: z.string().min(1, 'Choose something'),
-  }),
-});
 
 export function TrainerRegistrationForm() {
   const form = useAppForm({
     defaultValues: {
       trainerName: '',
       trainerAge: '' as string | number,
-      pokemon: { id: 0, name: '' },
+      pokemon: null as PokemonSummary | null,
     },
     validators: {
       onChange: trainerFormSchema,
+    },
+    onSubmitInvalid: () => {
+      const InvalidInput = document.querySelector('[aria-invalid="true"]') as HTMLInputElement;
+      InvalidInput?.focus();
     },
     onSubmit: async ({ value }) => {
       const data = trainerFormSchema.parse(value);
@@ -80,7 +68,7 @@ export function TrainerRegistrationForm() {
         </form.AppField>
 
         <form.Subscribe selector={(state) => state.values.pokemon}>
-          {(pokemon) => <PokemonDetails pokemonId={pokemon.id > 0 ? pokemon.id : null} />}
+          {(pokemon) => <PokemonDetails pokemon={pokemon} />}
         </form.Subscribe>
 
         <form.ActionButtons />

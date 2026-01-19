@@ -1,7 +1,15 @@
+import { apiClient } from '../api-client';
+import type { Trainer } from '../schema/trainer';
+
+type TrainerRegistrationResponse = Trainer & {
+  id: string;
+};
+
 export const trainerApi = {
-  register: (trainerData: { name: string; age: number; pokemon: string }) =>
-    new Promise<{ ok: boolean; data: unknown }>(async (resolve) => {
-      await new Promise((r) => setTimeout(r, 500));
-      resolve({ ok: true, data: { id: 'trainer-1', ...trainerData } });
+  register: (trainerData: Trainer) =>
+    apiClient<TrainerRegistrationResponse>('/api/trainer', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(trainerData),
     }),
 };

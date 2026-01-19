@@ -1,5 +1,3 @@
-'use client';
-
 import { Paper, Stack, Typography } from '@mui/material';
 
 import { FormattedDate } from '@/components/formatted-date';

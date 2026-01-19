@@ -2,6 +2,7 @@ import { useDebouncedValue } from '@tanstack/react-pacer/debouncer';
 import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { pokemonApi } from '../lib/api/pokemon';
+import { POKEMON_SEARCH_MIN } from '../lib/schema/pokemon';
 
 export function usePokemonSearchQuery(pokemonName: string | null | undefined) {
   const trimmedName = pokemonName?.trim() ?? '';
@@ -27,11 +28,11 @@ export function useDebouncedPokemonSearchQuery(pokemonName: string | null | unde
   const query = useQuery({
     queryKey: ['pokemon', effectiveName],
     queryFn: () => pokemonApi.searchByName(effectiveName),
-    enabled: effectiveName.length > 2,
+    enabled: effectiveName.length >= POKEMON_SEARCH_MIN,
   });
 
   return {
     query,
-    isDebouncing: !hasCache && debouncer.state.isPending,
+    isDebouncing: Boolean(trimmedName) && !hasCache && debouncer.state.isPending,
   };
 }

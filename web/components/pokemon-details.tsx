@@ -5,6 +5,8 @@ import { styled } from '@mui/material/styles';
 
 import { usePokemonDetailsQuery } from '@/hooks/use-pokemon-details';
 
+import type { PokemonSummary } from '../lib/schema/pokemon';
+
 const Container = styled(Paper)(({ theme }) => ({
   borderColor: theme.palette.grey[300],
   borderRadius: theme.shape.borderRadius * 1.5,
@@ -87,11 +89,11 @@ const SpriteImg = styled('img')({
 });
 
 type PokemonDetailsProps = {
-  pokemonId?: number | null;
+  pokemon?: PokemonSummary | null;
 };
 
-export function PokemonDetails({ pokemonId }: PokemonDetailsProps) {
-  const { data: details, isLoading } = usePokemonDetailsQuery(pokemonId);
+export function PokemonDetails({ pokemon }: PokemonDetailsProps) {
+  const { data: details, isLoading } = usePokemonDetailsQuery(pokemon?.id);
 
   if (isLoading)
     return (
