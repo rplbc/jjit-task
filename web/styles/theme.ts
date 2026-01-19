@@ -71,7 +71,7 @@ export const muiTheme = createTheme({
       primary: '#2A2A2A',
       secondary: '#7F7F7F',
     },
-    divider: '#E4E4E4',
+    divider: '#EEEEEE',
     action: {
       disabled: '#7F7F7F',
       disabledBackground: '#00000033',

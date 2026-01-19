@@ -8,8 +8,6 @@ import { usePokemonDetailsQuery } from '@/hooks/use-pokemon-details';
 import type { PokemonSummary } from '../lib/schema/pokemon';
 
 const Container = styled(Paper)(({ theme }) => ({
-  borderColor: theme.palette.grey[300],
-  borderRadius: theme.shape.borderRadius * 1.5,
   padding: theme.spacing(3.5),
   minHeight: 254,
   display: 'flex',

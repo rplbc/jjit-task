@@ -1,0 +1,32 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: api/src/PokemonApi/Dockerfile
+    ports:
+      - "5189:5189"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      NtpServer: ntp.google.com
+    networks:
+      - pokemonapi
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:5189
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      HOSTNAME: "0.0.0.0"
+    depends_on:
+      - api
+    networks:
+      - pokemonapi
+
+networks:
+  pokemonapi:
