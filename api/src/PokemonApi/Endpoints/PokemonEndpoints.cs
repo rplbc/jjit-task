@@ -12,7 +12,7 @@ public static class PokemonEndpoints
             .MapGet("/pokemon", GetPokemonAsync)
             .WithName("GetPokemon")
             .WithSummary("Get Pokemon details by id")
-            .Produces(StatusCodes.Status200OK, typeof(PokemonDetailsDto))
+            .Produces(StatusCodes.Status200OK, typeof(PokemonDetailsModel))
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status404NotFound);
 

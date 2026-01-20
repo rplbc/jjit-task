@@ -11,7 +11,7 @@ public static class TestHelpers
         IPokemonCatalog? pokemonCatalog = null)
     {
         ntpService ??= new StubNtpService(DateTimeOffset.UtcNow);
-        pokemonDetailsService ??= new StubPokemonDetailsService(new Dictionary<int, PokemonDetailsDto?>());
+        pokemonDetailsService ??= new StubPokemonDetailsService(new Dictionary<int, PokemonDetailsModel?>());
         pokemonCatalog ??= new StubPokemonCatalog(new[] { new PokemonSummary(25, "pikachu") });
 
         return new TestApplicationFactory(ntpService, pokemonDetailsService, pokemonCatalog);

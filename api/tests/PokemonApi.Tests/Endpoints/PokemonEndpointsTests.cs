@@ -9,7 +9,7 @@ public class PokemonEndpointsTests
     [Fact]
     public async Task GetPokemon_ReturnsPokemon()
     {
-        var pokemon = new PokemonDetailsDto
+        var pokemon = new PokemonDetailsModel
         {
             Id = 25,
             Name = "pikachu",
@@ -20,13 +20,13 @@ public class PokemonEndpointsTests
 
         using var factory = TestHelpers.CreateFactory(
             pokemonDetailsService: new StubPokemonDetailsService(
-                new Dictionary<int, PokemonDetailsDto?> { [25] = pokemon }
+                new Dictionary<int, PokemonDetailsModel?> { [25] = pokemon }
             )
         );
         using var client = factory.CreateClient();
 
         var response = await client.GetAsync("/api/pokemon?id=25");
-        var payload = await response.Content.ReadFromJsonAsync<PokemonDetailsDto>();
+        var payload = await response.Content.ReadFromJsonAsync<PokemonDetailsModel>();
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.NotNull(payload);

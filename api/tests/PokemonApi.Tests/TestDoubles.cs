@@ -20,14 +20,14 @@ public sealed class StubNtpService : INtpService
 
 public sealed class StubPokemonDetailsService : IPokemonDetailsService
 {
-    private readonly Dictionary<int, PokemonDetailsDto?> _pokemonById;
+    private readonly Dictionary<int, PokemonDetailsModel?> _pokemonById;
 
-    public StubPokemonDetailsService(Dictionary<int, PokemonDetailsDto?> pokemonById)
+    public StubPokemonDetailsService(Dictionary<int, PokemonDetailsModel?> pokemonById)
     {
         _pokemonById = pokemonById;
     }
 
-    public Task<PokemonDetailsDto?> GetPokemonAsync(int id, CancellationToken cancellationToken)
+    public Task<PokemonDetailsModel?> GetPokemonAsync(int id, CancellationToken cancellationToken)
     {
         _pokemonById.TryGetValue(id, out var pokemon);
         return Task.FromResult(pokemon);

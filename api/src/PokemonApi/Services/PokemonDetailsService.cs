@@ -16,9 +16,9 @@ public sealed class PokemonDetailsService : IPokemonDetailsService
         _cache = cache;
     }
 
-    public async Task<PokemonDetailsDto?> GetPokemonAsync(int id, CancellationToken cancellationToken)
+    public async Task<PokemonDetailsModel?> GetPokemonAsync(int id, CancellationToken cancellationToken)
     {
-        if (_cache.TryGetValue(id, out PokemonDetailsDto? cached))
+        if (_cache.TryGetValue(id, out PokemonDetailsModel? cached))
         {
             return cached;
         }
@@ -38,7 +38,7 @@ public sealed class PokemonDetailsService : IPokemonDetailsService
             return null;
         }
 
-        var details = new PokemonDetailsDto
+        var details = new PokemonDetailsModel
         {
             Id = payload.Id,
             Name = payload.Name,
@@ -56,7 +56,7 @@ public sealed class PokemonDetailsService : IPokemonDetailsService
     }
 }
 
-public sealed class PokemonDetailsDto
+public sealed class PokemonDetailsModel
 {
     public int Id { get; init; }
 
