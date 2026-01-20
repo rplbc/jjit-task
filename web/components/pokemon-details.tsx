@@ -1,89 +1,16 @@
 'use client';
 
-import { Box, Chip, Paper, Stack } from '@mui/material';
+import { Box, Chip, Paper, Stack, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 import { usePokemonDetailsQuery } from '@/hooks/use-pokemon-details';
+import type { PokemonSummary } from '@/lib/schema/pokemon';
 
-import type { PokemonSummary } from '../lib/schema/pokemon';
-
-const Container = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(3.5),
+const Container = styled(Paper)({
   minHeight: 254,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-}));
-
-const SpriteBox = styled(Box)(({ theme }) => ({
-  width: 120,
-  height: 120,
-  borderRadius: theme.shape.borderRadius * 1.5,
-  backgroundColor: theme.palette.background.paper,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  [theme.breakpoints.up('sm')]: {
-    width: 160,
-    height: 160,
-  },
-}));
-
-const LabelText = styled('span')(({ theme }) => ({
-  fontSize: 14,
-  color: theme.palette.text.primary,
-}));
-
-const DetailsList = styled('dl')(({ theme }) => ({
-  width: '100%',
-  display: 'grid',
-  gridTemplateColumns: 'max-content 1fr',
-  columnGap: 16,
-  rowGap: 14,
-  margin: 0,
-  [theme.breakpoints.up('sm')]: {
-    columnGap: 24,
-    rowGap: 18,
-  },
-}));
-
-const TermText = styled('dt')(({ theme }) => ({
-  fontSize: 14,
-  color: theme.palette.text.secondary,
-  margin: 0,
-  fontWeight: 600,
-  [theme.breakpoints.up('sm')]: {
-    fontSize: 16,
-  },
-}));
-
-const ValueText = styled('dd')(({ theme }) => ({
-  fontSize: 14,
-  color: theme.palette.text.primary,
-  margin: 0,
-  [theme.breakpoints.up('sm')]: {
-    fontSize: 16,
-  },
-}));
-
-const ChipRow = styled(Stack)(() => ({
-  flexWrap: 'wrap',
-  gap: 12,
-}));
-
-const TypeChip = styled(Chip)(({ theme }) => ({
-  borderRadius: 999,
-  paddingLeft: theme.spacing(1.5),
-  paddingRight: theme.spacing(1.5),
-  fontSize: 14,
-  backgroundColor: theme.palette.primary.light,
-  color: theme.palette.text.primary,
-}));
-
-const SpriteImg = styled('img')({
-  width: '100%',
-  height: '100%',
-  objectFit: 'contain',
 });
 
 type PokemonDetailsProps = {
@@ -91,19 +18,19 @@ type PokemonDetailsProps = {
 };
 
 export function PokemonDetails({ pokemon }: PokemonDetailsProps) {
-  const { data: details, isLoading } = usePokemonDetailsQuery(pokemon?.id);
+  const { data: details, isFetching } = usePokemonDetailsQuery(pokemon?.id);
 
-  if (isLoading)
+  if (isFetching)
     return (
       <Container variant="outlined">
-        <LabelText>Loading...</LabelText>
+        <Typography variant="body2">Loading...</Typography>
       </Container>
     );
 
   if (!details || !details.ok)
     return (
       <Container variant="outlined">
-        <LabelText>Your pokemon</LabelText>
+        <Typography variant="body2">Your pokemon</Typography>
       </Container>
     );
 
@@ -111,35 +38,42 @@ export function PokemonDetails({ pokemon }: PokemonDetailsProps) {
 
   return (
     <Container variant="outlined">
-      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 6 }} alignItems="center">
-        <SpriteBox>
-          {detailsData.img ? (
-            <SpriteImg src={detailsData.img} alt={detailsData.name} />
-          ) : (
-            <LabelText>No image</LabelText>
-          )}
-        </SpriteBox>
-        <DetailsList>
-          <TermText>Name:</TermText>
-          <ValueText>{detailsData.name}</ValueText>
+      <Stack
+        direction="row"
+        p={4}
+        spacing={3}
+        sx={{ flexWrap: 'wrap' }}
+        alignItems="center"
+        justifyContent="center"
+        useFlexGap
+      >
+        {detailsData.img ? (
+          <Box
+            component="img"
+            src={detailsData.img}
+            alt={detailsData.name}
+            sx={{
+              width: 194,
+              height: 196,
+              objectFit: 'contain',
+              color: 'transparent',
+            }}
+          />
+        ) : null}
 
-          <TermText>Type:</TermText>
-          <ValueText>
-            <ChipRow direction="row">
-              {detailsData.types.length ? (
-                detailsData.types.map((type) => <TypeChip key={type} label={type} />)
-              ) : (
-                <LabelText>—</LabelText>
-              )}
-            </ChipRow>
-          </ValueText>
-
-          <TermText>Base experience:</TermText>
-          <ValueText>{detailsData.base_experience || '—'}</ValueText>
-
-          <TermText>Id:</TermText>
-          <ValueText>{detailsData.id || '—'}</ValueText>
-        </DetailsList>
+        <Stack spacing={2}>
+          <div>Name: {detailsData.name}</div>
+          <div>
+            Type:{' '}
+            <Box sx={{ display: 'inline-flex', flexWrap: 'wrap' }} gap={1}>
+              {detailsData.types.map((type) => (
+                <Chip key={type} label={type} sx={{ bgcolor: 'primary.light' }} />
+              ))}
+            </Box>
+          </div>
+          <div>Base experience: {detailsData.base_experience}</div>
+          <div>Id: {detailsData.id}</div>
+        </Stack>
       </Stack>
     </Container>
   );

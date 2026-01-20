@@ -1,11 +1,12 @@
 'use client';
 
 import { Autocomplete, CircularProgress, OutlinedInput, type TextFieldProps } from '@mui/material';
-import { type SyntheticEvent, useId, useState } from 'react';
+import React, { useId, useState } from 'react';
 
 import { useFieldContext } from '@/hooks/form-context';
-import { useDebouncedPokemonSearchQuery } from '@/hooks/use-pokemon-search-query';
-import { POKEMON_SEARCH_MIN, type PokemonSummary } from '@/lib/schema/pokemon';
+import { useFormErrorMessage } from '@/hooks/use-form-error-message';
+import { usePokemonSearchQuery } from '@/hooks/use-pokemon-search-query';
+import { type PokemonSummary } from '@/lib/schema/pokemon';
 
 import { FormField } from './form-field';
 
@@ -15,27 +16,8 @@ type FormPokemonAutocompleteProps = {
   helperText?: TextFieldProps['helperText'];
 };
 
-function getFieldErrorMessage(meta: {
-  errors?: Array<Record<string, unknown> | string>;
-  isTouched?: boolean;
-}) {
-  if (!meta?.isTouched) {
-    return undefined;
-  }
-
-  const firstError = meta.errors?.[0];
-  if (typeof firstError === 'string') {
-    return firstError;
-  }
-
-  const nestedErrors = [
-    (firstError as { ['pokemon.id']?: string })?.['pokemon.id'],
-    (firstError as { ['pokemon.name']?: string })?.['pokemon.name'],
-    (firstError as { message?: string })?.message,
-  ].filter(Boolean);
-
-  return nestedErrors[0];
-}
+type Value = PokemonSummary | null;
+type TAutocomplete = React.ComponentProps<typeof Autocomplete<Value>>;
 
 export function FormPokemonAutocomplete({
   label,
@@ -43,50 +25,32 @@ export function FormPokemonAutocomplete({
   helperText,
 }: FormPokemonAutocompleteProps) {
   const fieldId = useId();
-  const field = useFieldContext<PokemonSummary | null>();
+  const field = useFieldContext<Value>();
+  const errorMessage = useFormErrorMessage();
 
   const value = field.state.value;
   const [inputValue, setInputValue] = useState(value?.name ?? '');
   const [searchValue, setSearchValue] = useState(value?.name ?? '');
   const {
-    query: { data: pokemonData, isFetching: pokemonLoading },
-    isDebouncing,
-  } = useDebouncedPokemonSearchQuery(searchValue);
+    query: { data },
+    isLoading,
+    correctName,
+  } = usePokemonSearchQuery(searchValue);
 
-  const options = pokemonData && pokemonData.ok ? pokemonData.data : [];
-  const isLoading =
-    pokemonLoading || (searchValue.length >= POKEMON_SEARCH_MIN && isDebouncing);
-  const errorMessage = getFieldErrorMessage(field.state.meta);
+  const options = data?.ok ? data.data : [];
 
-  const handleChange = (_: SyntheticEvent, selectedValue: PokemonSummary | null) => {
-    if (selectedValue) {
-      field.handleChange(selectedValue);
-      setInputValue(selectedValue.name);
-      setSearchValue(selectedValue.name);
-      return;
-    }
-
-    field.handleChange(null);
-    setInputValue('');
-    setSearchValue('');
+  const handleChange: TAutocomplete['onChange'] = (_, selected) => {
+    field.handleChange(selected);
+    setInputValue(selected?.name ?? '');
   };
 
-  const handleInputChange = (_: SyntheticEvent, nextValue: string, reason: string) => {
+  const handleInputChange: TAutocomplete['onInputChange'] = (_, nextValue, reason) => {
     setInputValue(nextValue);
 
+    // to keep the previous search results
+    // don't set search on reset, clear or selectOption
     if (reason === 'input') {
       setSearchValue(nextValue);
-      return;
-    }
-
-    if (reason === 'reset') {
-      setSearchValue(nextValue);
-      return;
-    }
-
-    if (reason === 'clear') {
-      setSearchValue('');
-      field.handleChange(null);
     }
   };
 
@@ -103,20 +67,12 @@ export function FormPokemonAutocomplete({
         inputValue={inputValue}
         onInputChange={handleInputChange}
         options={options}
-        getOptionLabel={(option) => {
-          if (!option || typeof option === 'string' || Array.isArray(option)) {
-            return typeof option === 'string' ? option : '';
-          }
-
-          return option.name ?? '';
-        }}
-        isOptionEqualToValue={(option, value) => option.id === value.id}
+        getOptionLabel={(option) => option.name}
+        isOptionEqualToValue={(option, v) => option.id === v.id}
         filterOptions={(x) => x}
         loading={isLoading}
         noOptionsText={
-          inputValue.length >= POKEMON_SEARCH_MIN
-            ? 'No Pokemon found'
-            : `Start typing to search (min ${POKEMON_SEARCH_MIN} letters)...`
+          correctName ? 'No Pokemon found' : `Start typing to search (min 2 letters)...`
         }
         fullWidth
         renderInput={(params) => {

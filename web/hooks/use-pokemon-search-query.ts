@@ -1,38 +1,34 @@
 import { useDebouncedValue } from '@tanstack/react-pacer/debouncer';
-import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
+import { z } from 'zod';
 
-import { pokemonApi } from '../lib/api/pokemon';
-import { POKEMON_SEARCH_MIN } from '../lib/schema/pokemon';
+import { pokemonApi } from '@/lib/api/pokemon';
+import { POKEMON_SEARCH_MIN } from '@/lib/schema/pokemon';
+
+const DEBOUNCE_MS = 300;
+const schema = z.string().trim().min(POKEMON_SEARCH_MIN);
 
 export function usePokemonSearchQuery(pokemonName: string | null | undefined) {
-  const trimmedName = pokemonName?.trim() ?? '';
+  const [debouncedName, debouncer] = useDebouncedValue(
+    pokemonName,
+    { wait: DEBOUNCE_MS },
+    (state) => ({
+      isPending: state.isPending,
+    }),
+  );
+  const { success: enabled, data: name } = schema.safeParse(debouncedName);
 
-  return useQuery({
-    queryKey: ['pokemon', trimmedName],
-    queryFn: () => pokemonApi.searchByName(trimmedName),
-    enabled: trimmedName.length > 0,
-    placeholderData: keepPreviousData,
-  });
-}
-
-export function useDebouncedPokemonSearchQuery(pokemonName: string | null | undefined) {
-  const queryClient = useQueryClient();
-  const trimmedName = pokemonName?.trim() ?? '';
-  const cachedResult = queryClient.getQueryData(['pokemon', trimmedName]);
-  const hasCache = Boolean(cachedResult);
-  const [debouncedName, debouncer] = useDebouncedValue(trimmedName, { wait: 300 }, (state) => ({
-    isPending: state.isPending,
-  }));
-  const effectiveName = hasCache ? trimmedName : debouncedName;
-
+  // consider persistent query client for caching across the app
   const query = useQuery({
-    queryKey: ['pokemon', effectiveName],
-    queryFn: () => pokemonApi.searchByName(effectiveName),
-    enabled: effectiveName.length >= POKEMON_SEARCH_MIN,
+    queryKey: ['pokemon', name],
+    queryFn: () => pokemonApi.searchByName(name as string),
+    enabled,
   });
 
   return {
     query,
-    isDebouncing: Boolean(trimmedName) && !hasCache && debouncer.state.isPending,
+    isDebouncing: enabled && debouncer.state.isPending,
+    isLoading: query.isFetching,
+    correctName: enabled,
   };
 }

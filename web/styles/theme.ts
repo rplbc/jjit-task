@@ -46,6 +46,19 @@ export const muiTheme = createTheme({
   },
   typography: {
     fontFamily: 'var(--font-web437)',
+    subtitle1: {
+      fontSize: 12,
+      lineHeight: '20px',
+    },
+    body2: {
+      color: 'var(--mui-palette-grey-200)',
+      fontSize: 12,
+      lineHeight: '20px',
+    },
+    body1: {
+      fontSize: 14,
+      lineHeight: '20px',
+    },
   },
   palette: {
     primary: {

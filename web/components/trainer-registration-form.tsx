@@ -3,39 +3,12 @@
 import { Stack } from '@mui/material';
 import Grid2 from '@mui/material/Grid2';
 
-import { trainerApi } from '@/lib/api/trainer';
-import { type PokemonSummary } from '@/lib/schema/pokemon';
-import { trainerFormSchema } from '@/lib/schema/trainer';
+import { useTrainerRegistrationForm } from '@/hooks/use-trainer-registration-form';
 
-import { useAppForm } from './forms/app-form';
 import { PokemonDetails } from './pokemon-details';
 
 export function TrainerRegistrationForm() {
-  const form = useAppForm({
-    defaultValues: {
-      trainerName: '',
-      trainerAge: '' as string | number,
-      pokemon: null as PokemonSummary | null,
-    },
-    validators: {
-      onChange: trainerFormSchema,
-    },
-    onSubmitInvalid: () => {
-      const InvalidInput = document.querySelector('[aria-invalid="true"]') as HTMLInputElement;
-      InvalidInput?.focus();
-    },
-    onSubmit: async ({ value }) => {
-      const data = trainerFormSchema.parse(value);
-
-      const r = await trainerApi.register({
-        name: data.trainerName,
-        age: data.trainerAge,
-        pokemon: data.pokemon.name,
-      });
-
-      if (!r.ok) throw new Error('Failed to register trainer');
-    },
-  });
+  const form = useTrainerRegistrationForm();
 
   return (
     <form.AppForm>

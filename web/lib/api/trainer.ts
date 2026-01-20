@@ -1,5 +1,5 @@
-import { apiClient } from '../api-client';
-import type { Trainer } from '../schema/trainer';
+import { apiClient } from '@/lib/api-client';
+import type { Trainer } from '@/lib/schema/trainer';
 
 type TrainerRegistrationResponse = Trainer & {
   id: string;

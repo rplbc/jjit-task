@@ -4,6 +4,7 @@ import { OutlinedInput, type TextFieldProps } from '@mui/material';
 import { useId } from 'react';
 
 import { useFieldContext } from '@/hooks/form-context';
+import { useFormErrorMessage } from '@/hooks/use-form-error-message';
 
 import { FormField } from './form-field';
 
@@ -16,10 +17,7 @@ type FormTextFieldProps = {
 export function FormTextField({ label, placeholder, helperText }: FormTextFieldProps) {
   const fieldId = useId();
   const field = useFieldContext<string>();
-
-  const errorMessage = field.state.meta.isTouched
-    ? field.state.meta.errors?.[0]?.message
-    : undefined;
+  const errorMessage = useFormErrorMessage();
 
   return (
     <FormField

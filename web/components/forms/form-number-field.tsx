@@ -5,6 +5,7 @@ import { OutlinedInput, type TextFieldProps } from '@mui/material';
 import { useId } from 'react';
 
 import { useFieldContext } from '@/hooks/form-context';
+import { useFormErrorMessage } from '@/hooks/use-form-error-message';
 
 import { FormField } from './form-field';
 
@@ -17,19 +18,16 @@ type FormNumberFieldProps = {
 export function FormNumberField({ label, placeholder, helperText }: FormNumberFieldProps) {
   const fieldId = useId();
   const field = useFieldContext<number | ''>();
+  const errorMessage = useFormErrorMessage();
 
-  const errorMessage = field.state.meta.isTouched
-    ? field.state.meta.errors?.[0]?.message
-    : undefined;
-
-  const resolvedValue =
+  const value =
     typeof field.state.value === 'number' && Number.isFinite(field.state.value)
       ? field.state.value
       : null;
 
   return (
     <BaseNumberField.Root
-      value={resolvedValue}
+      value={value}
       onValueChange={(value) => {
         if (value === null || Number.isNaN(value)) {
           field.handleChange('');
@@ -57,6 +55,7 @@ export function FormNumberField({ label, placeholder, helperText }: FormNumberFi
             inputRef={props.ref}
             name={field.name}
             value={state.inputValue}
+            error={Boolean(errorMessage)}
             onBlur={(event) => {
               props.onBlur?.(event);
               field.handleBlur();
@@ -66,9 +65,6 @@ export function FormNumberField({ label, placeholder, helperText }: FormNumberFi
             onKeyDown={props.onKeyDown}
             onFocus={props.onFocus}
             placeholder={placeholder}
-            slotProps={{
-              input: props,
-            }}
           />
         )}
       />

@@ -12,15 +12,16 @@ export function NewTrainerRegistration({ date }: NewTrainerRegistrationProps) {
     <Paper
       variant="outlined"
       sx={{
-        padding: '36px',
-        margin: '36px',
+        p: 4,
+        my: 4,
+        mx: 'auto',
+        width: 'calc(100% - 64px)',
         maxWidth: '544px',
-        marginInline: 'auto',
       }}
     >
       <Stack spacing={3}>
         {date ? (
-          <Typography align="right">
+          <Typography align="right" variant="subtitle1" component="p">
             <FormattedDate>{date}</FormattedDate>
           </Typography>
         ) : null}
