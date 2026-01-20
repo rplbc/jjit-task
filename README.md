@@ -1,56 +1,47 @@
 # Trainer Registration App
 
-A Next.js frontend and .NET minimal API for registering Pokemon trainers. It fetches NTP time server-side, offers fuzzy search over local Pokemon data, and caches PokeAPI lookups.
+Next.js frontend and .NET 10 API.
 
-## Contents
+## Repo
 
-- `api/` - .NET minimal API (endpoints, services, test project)
-- `web/` - Next.js app (App Router, MUI, form flow)
+- `api/` .NET API
+- `web/` Next.js app
 
-## Prerequisites
+## Prereqs
 
-Docker path:
-- Docker Desktop (or Docker Engine + Compose)
-
-Local dev path:
+- Docker Desktop (or Engine + Compose)
 - .NET SDK 10
 - Node.js 20+
 - pnpm
 
-## Quickstart
-
-### Docker (recommended)
+## Run (Docker)
 
 ```bash
 docker compose up --build
 ```
 
-Then open:
 - Web: `http://localhost:3000`
 - API: `http://localhost:5189`
-- API docs: `http://localhost:5189/openapi` (Scalar UI available at runtime)
+- API docs (Development only): `http://localhost:5189/openapi`
 
-### Local dev
+## Run (Local)
 
-API:
 ```bash
 dotnet run --project api/src/PokemonApi
 ```
 
-Web:
 ```bash
 pnpm -C web install
 NEXT_PUBLIC_API_URL=http://localhost:5189 pnpm -C web dev
 ```
 
-## Testing
+## Test
 
-API:
 ```bash
 dotnet test api/tests/PokemonApi.Tests/PokemonApi.Tests.csproj
 ```
 
-## Docs
+## More
 
-- API details: `api/README.md`
-- Web details: `web/README.md`
+- `api/README.md`
+- `web/README.md`

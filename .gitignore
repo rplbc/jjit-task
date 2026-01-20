@@ -529,3 +529,4 @@ next-env.d.ts
 dotnet-tools.json
 
 !.env.example
+scripts/

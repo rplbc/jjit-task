@@ -1,29 +1,41 @@
 using System.Net;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
+using PokemonApi.Models;
 
 namespace PokemonApi.Services;
 
 public sealed class PokemonDetailsService : IPokemonDetailsService
 {
+    private const string DefaultBaseUrl = "https://pokeapi.co/api/v2/";
     private static readonly TimeSpan CacheDuration = TimeSpan.FromHours(1);
     private readonly HttpClient _httpClient;
     private readonly IMemoryCache _cache;
 
-    public PokemonDetailsService(HttpClient httpClient, IMemoryCache cache)
+    public PokemonDetailsService(HttpClient httpClient, IMemoryCache cache, IConfiguration configuration)
     {
         _httpClient = httpClient;
         _cache = cache;
+
+        if (_httpClient.BaseAddress is null)
+        {
+            var configuredBaseUrl = configuration["PokeApiBaseUrl"];
+            var baseUrl = string.IsNullOrWhiteSpace(configuredBaseUrl)
+                ? DefaultBaseUrl
+                : configuredBaseUrl;
+            _httpClient.BaseAddress = new Uri(baseUrl);
+        }
     }
 
-    public async Task<PokemonDetailsModel?> GetPokemonAsync(int id, CancellationToken cancellationToken)
+    public async Task<PokemonDetailsModel?> GetPokemonAsync(int id)
     {
         if (_cache.TryGetValue(id, out PokemonDetailsModel? cached))
         {
             return cached;
         }
 
-        using var response = await _httpClient.GetAsync($"pokemon/{id}", cancellationToken);
+        using var response = await _httpClient.GetAsync($"pokemon/{id}");
 
         if (response.StatusCode == HttpStatusCode.NotFound)
         {
@@ -32,7 +44,7 @@ public sealed class PokemonDetailsService : IPokemonDetailsService
 
         response.EnsureSuccessStatusCode();
 
-        var payload = await response.Content.ReadFromJsonAsync<PokeApiPokemon>(cancellationToken: cancellationToken);
+        var payload = await response.Content.ReadFromJsonAsync<PokeApiPokemon>();
         if (payload is null)
         {
             return null;
@@ -44,8 +56,8 @@ public sealed class PokemonDetailsService : IPokemonDetailsService
             Name = payload.Name,
             BaseExperience = payload.BaseExperience,
             Img = payload.Sprites?.FrontDefault,
-            Types = payload.Types
-                .Select(type => type.Type.Name)
+            Types = payload
+                .Types.Select(type => type.Type.Name)
                 .Where(name => !string.IsNullOrWhiteSpace(name))
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .ToArray(),
@@ -54,21 +66,6 @@ public sealed class PokemonDetailsService : IPokemonDetailsService
         _cache.Set(id, details, CacheDuration);
         return details;
     }
-}
-
-public sealed class PokemonDetailsModel
-{
-    public int Id { get; init; }
-
-    public string Name { get; init; } = string.Empty;
-
-    [JsonPropertyName("base_experience")]
-    public int BaseExperience { get; init; }
-
-    [JsonPropertyName("img")]
-    public string? Img { get; init; }
-
-    public IReadOnlyList<string> Types { get; init; } = Array.Empty<string>();
 }
 
 internal sealed class PokeApiPokemon

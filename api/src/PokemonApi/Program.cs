@@ -6,19 +6,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<INtpService, NtpService>();
 builder.Services.AddSingleton<IPokemonCatalog, PokemonCatalog>();
+
 builder.Services.AddMemoryCache();
-builder.Services.AddHttpClient<IPokemonDetailsService, PokemonDetailsService>(client =>
-{
-    client.BaseAddress = new Uri("https://pokeapi.co/api/v2/");
-});
+
+builder.Services.AddHttpClient<IPokemonDetailsService, PokemonDetailsService>();
+
 builder.Services.AddValidation();
+
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policy =>
-        policy.AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader());
+    options.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 
@@ -32,17 +31,16 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler(exceptionHandlerApp =>
-        exceptionHandlerApp.Run(async context => await Results.Problem().ExecuteAsync(context))
-    );
+    app.UseExceptionHandler(err => err.Run(async ctx => await Results.Problem().ExecuteAsync(ctx)));
 }
 
 app.UseCors();
 
-var apiGroup = app.MapGroup("/api");
-apiGroup.WithTags("Ntp").MapTimeEndpoints();
-apiGroup.WithTags("Pokemon").MapSearchEndpoints();
-apiGroup.WithTags("Pokemon").MapPokemonEndpoints();
-apiGroup.WithTags("Trainer").MapTrainerEndpoints();
+var api = app.MapGroup("/api");
+
+api.MapTimeEndpoints();
+api.MapSearchEndpoints();
+api.MapPokemonEndpoints();
+api.MapTrainerEndpoints();
 
 app.Run();

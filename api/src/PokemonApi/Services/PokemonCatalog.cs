@@ -15,15 +15,22 @@ public class PokemonCatalog : IPokemonCatalog
         }
 
         var json = File.ReadAllText(jsonPath);
-        var payload = JsonSerializer.Deserialize<PokemonPayload>(json, new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true,
-        });
+        var payload = JsonSerializer.Deserialize<PokemonPayload>(
+            json,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+        );
 
-        var pokemon = payload?.Data ?? throw new InvalidOperationException("pokemon.json is missing the data array.");
-        var summaries = pokemon.Select(pokemon => new PokemonSummary(pokemon.Id, pokemon.Name)).ToArray();
+        var pokemon =
+            payload?.Data
+            ?? throw new InvalidOperationException("pokemon.json is missing the data array.");
+        var summaries = pokemon
+            .Select(pokemon => new PokemonSummary(pokemon.Id, pokemon.Name))
+            .ToArray();
         Names = summaries.Select(pokemon => pokemon.Name).ToArray();
-        PokemonByName = summaries.ToDictionary(pokemon => pokemon.Name, StringComparer.OrdinalIgnoreCase);
+        PokemonByName = summaries.ToDictionary(
+            pokemon => pokemon.Name,
+            StringComparer.OrdinalIgnoreCase
+        );
     }
 
     public IReadOnlyDictionary<string, PokemonSummary> PokemonByName { get; }

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using PokemonApi.Models;
 using PokemonApi.Services;
-using System.ComponentModel.DataAnnotations;
 
 namespace PokemonApi.Endpoints;
 
@@ -10,6 +10,7 @@ public static class PokemonEndpoints
     {
         group
             .MapGet("/pokemon", GetPokemonAsync)
+            .WithTags("Pokemon")
             .WithName("GetPokemon")
             .WithSummary("Get Pokemon details by id")
             .Produces(StatusCodes.Status200OK, typeof(PokemonDetailsModel))
@@ -21,17 +22,10 @@ public static class PokemonEndpoints
 
     internal static async Task<IResult> GetPokemonAsync(
         [FromServices] IPokemonDetailsService pokemonService,
-        [AsParameters] PokemonRequest request,
-        CancellationToken cancellationToken)
+        [AsParameters] PokemonRequest request
+    )
     {
-        var pokemon = await pokemonService.GetPokemonAsync(request.Id, cancellationToken);
+        var pokemon = await pokemonService.GetPokemonAsync(request.Id);
         return pokemon is null ? TypedResults.NotFound() : TypedResults.Ok(pokemon);
-    }
-
-    public sealed class PokemonRequest
-    {
-        [FromQuery(Name = "id")]
-        [Range(1, int.MaxValue)]
-        public int Id { get; init; }
     }
 }

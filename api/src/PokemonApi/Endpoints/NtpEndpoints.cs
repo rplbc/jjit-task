@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using PokemonApi.Models;
 using PokemonApi.Services;
 
 namespace PokemonApi.Endpoints;
@@ -9,6 +10,7 @@ public static class NtpEndpoints
     {
         group
             .MapGet("/time", GetTimeAsync)
+            .WithTags("Ntp")
             .WithName("GetTime")
             .WithSummary("Get network time")
             .Produces(StatusCodes.Status200OK, typeof(TimeResponse))
@@ -16,8 +18,6 @@ public static class NtpEndpoints
 
         return group;
     }
-
-    public record TimeResponse(DateTimeOffset Time);
 
     internal static async Task<IResult> GetTimeAsync([FromServices] INtpService ntpService)
     {
