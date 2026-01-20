@@ -44,6 +44,13 @@ dotnet test api/tests/PokemonApi.Tests/PokemonApi.Tests.csproj
 Build and run (from repo root):
 
 ```bash
-docker build -f api/src/PokemonApi/Dockerfile -t pokemon-api .
+docker build -f api/src/PokemonApi/Dockerfile -t pokemon-api api/src/PokemonApi
 docker run -p 5189:5189 -e ASPNETCORE_ENVIRONMENT=Production pokemon-api
+```
+
+Compose (from repo root):
+
+```bash
+docker compose build api
+docker compose up api
 ```
