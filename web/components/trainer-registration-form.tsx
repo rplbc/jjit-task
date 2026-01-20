@@ -17,7 +17,7 @@ export function TrainerRegistrationForm() {
         spacing={3}
         onSubmit={(event) => {
           event.preventDefault();
-          void form.handleSubmit().catch(() => {
+          form.handleSubmit().catch(() => {
             alert('Something went wrong');
           });
         }}
