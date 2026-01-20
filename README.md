@@ -9,7 +9,6 @@ Next.js frontend and .NET 10 API.
 
 ## Prereqs
 
-- Docker Desktop (or Engine + Compose)
 - .NET SDK 10
 - Node.js 20+
 - pnpm
@@ -34,14 +33,3 @@ dotnet run --project api/src/PokemonApi
 pnpm -C web install
 NEXT_PUBLIC_API_URL=http://localhost:5189 pnpm -C web dev
 ```
-
-## Test
-
-```bash
-dotnet test api/tests/PokemonApi.Tests/PokemonApi.Tests.csproj
-```
-
-## More
-
-- `api/README.md`
-- `web/README.md`
