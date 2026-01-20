@@ -13,7 +13,11 @@ public sealed class PokemonDetailsService : IPokemonDetailsService
     private readonly HttpClient _httpClient;
     private readonly IMemoryCache _cache;
 
-    public PokemonDetailsService(HttpClient httpClient, IMemoryCache cache, IConfiguration configuration)
+    public PokemonDetailsService(
+        HttpClient httpClient,
+        IMemoryCache cache,
+        IConfiguration configuration
+    )
     {
         _httpClient = httpClient;
         _cache = cache;
