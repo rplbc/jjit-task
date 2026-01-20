@@ -1,8 +1,8 @@
 services:
   api:
     build:
-      context: .
-      dockerfile: api/src/PokemonApi/Dockerfile
+      context: ./api/src/PokemonApi
+      dockerfile: Dockerfile
     ports:
       - "5189:5189"
     environment:
