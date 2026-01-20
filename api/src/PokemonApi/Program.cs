@@ -4,14 +4,12 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<INtpService, NtpService>();
-builder.Services.AddSingleton<IPokemonCatalog, PokemonCatalog>();
-
 builder.Services.AddMemoryCache();
-
-builder.Services.AddHttpClient<IPokemonDetailsService, PokemonDetailsService>();
-
 builder.Services.AddValidation();
+
+builder.Services.AddSingleton<INtpService, NtpService>();
+builder.Services.AddSingleton<IPokemonSearchService, PokemonSearchService>();
+builder.Services.AddHttpClient<IPokemonDetailsService, PokemonDetailsService>();
 
 builder.Services.AddCors(options =>
 {

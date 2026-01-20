@@ -8,7 +8,6 @@ namespace PokemonApi.Services;
 
 public sealed class PokemonDetailsService : IPokemonDetailsService
 {
-    private const string DefaultBaseUrl = "https://pokeapi.co/api/v2/";
     private static readonly TimeSpan CacheDuration = TimeSpan.FromHours(1);
     private readonly HttpClient _httpClient;
     private readonly IMemoryCache _cache;
@@ -20,16 +19,10 @@ public sealed class PokemonDetailsService : IPokemonDetailsService
     )
     {
         _httpClient = httpClient;
+        _httpClient.BaseAddress ??= new Uri(
+            configuration.GetValue("PokeApiBaseUrl", "https://pokeapi.co/api/v2/")
+        );
         _cache = cache;
-
-        if (_httpClient.BaseAddress is null)
-        {
-            var configuredBaseUrl = configuration["PokeApiBaseUrl"];
-            var baseUrl = string.IsNullOrWhiteSpace(configuredBaseUrl)
-                ? DefaultBaseUrl
-                : configuredBaseUrl;
-            _httpClient.BaseAddress = new Uri(baseUrl);
-        }
     }
 
     public async Task<PokemonDetailsModel?> GetPokemonAsync(int id)
@@ -39,7 +32,7 @@ public sealed class PokemonDetailsService : IPokemonDetailsService
             return cached;
         }
 
-        using var response = await _httpClient.GetAsync($"pokemon/{id}");
+        var response = await _httpClient.GetAsync($"pokemon/{id}");
 
         if (response.StatusCode == HttpStatusCode.NotFound)
         {
@@ -49,7 +42,7 @@ public sealed class PokemonDetailsService : IPokemonDetailsService
         response.EnsureSuccessStatusCode();
 
         var payload = await response.Content.ReadFromJsonAsync<PokeApiPokemon>();
-        if (payload is null)
+        if (payload == null)
         {
             return null;
         }
@@ -60,14 +53,11 @@ public sealed class PokemonDetailsService : IPokemonDetailsService
             Name = payload.Name,
             BaseExperience = payload.BaseExperience,
             Img = payload.Sprites?.FrontDefault,
-            Types = payload
-                .Types.Select(type => type.Type.Name)
-                .Where(name => !string.IsNullOrWhiteSpace(name))
-                .Distinct(StringComparer.OrdinalIgnoreCase)
-                .ToArray(),
+            Types = payload.Types.Select(t => t.Type.Name).ToArray(),
         };
 
         _cache.Set(id, details, CacheDuration);
+
         return details;
     }
 }

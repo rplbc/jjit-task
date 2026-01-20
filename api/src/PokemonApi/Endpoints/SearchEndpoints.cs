@@ -1,4 +1,3 @@
-using FuzzySharp;
 using Microsoft.AspNetCore.Mvc;
 using PokemonApi.Models;
 using PokemonApi.Services;
@@ -21,21 +20,11 @@ public static class SearchEndpoints
     }
 
     internal static IResult Search(
-        [FromServices] IPokemonCatalog catalog,
+        [FromServices] IPokemonSearchService searchService,
         [AsParameters] SearchRequest request
     )
     {
-        var trimmedQuery = request.Q.Trim().ToLowerInvariant();
-        var matches = Process.ExtractTop(trimmedQuery, catalog.Names, limit: 10);
-        var results = matches
-            .Where(match => match.Score >= 70)
-            .Select(match =>
-                catalog.PokemonByName.TryGetValue(match.Value, out var pokemon) ? pokemon : null
-            )
-            .Where(pokemon => pokemon is not null)
-            .Select(pokemon => pokemon!)
-            .ToArray();
-
+        var results = searchService.Search(request.Q.Trim().ToLowerInvariant());
         return TypedResults.Ok(results);
     }
 }
