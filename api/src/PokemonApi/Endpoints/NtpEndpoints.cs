@@ -13,8 +13,7 @@ public static class NtpEndpoints
             .WithTags("Ntp")
             .WithName("GetTime")
             .WithSummary("Get network time")
-            .Produces(StatusCodes.Status200OK, typeof(GetTimeResponse))
-            .ProducesProblem(StatusCodes.Status500InternalServerError);
+            .Produces(StatusCodes.Status200OK, typeof(GetTimeResponse));
 
         return group;
     }

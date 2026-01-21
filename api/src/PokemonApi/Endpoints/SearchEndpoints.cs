@@ -15,7 +15,7 @@ public static class SearchEndpoints
             .WithName("SearchPokemon")
             .WithSummary("Search for Pokemon by name using fuzzy matching")
             .Produces(StatusCodes.Status200OK, typeof(PokemonSummaryResponse[]))
-            .ProducesProblem(StatusCodes.Status400BadRequest);
+            .ProducesValidationProblem();
 
         return group;
     }

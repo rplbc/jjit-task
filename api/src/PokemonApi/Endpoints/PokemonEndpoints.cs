@@ -15,7 +15,7 @@ public static class PokemonEndpoints
             .WithName("GetPokemon")
             .WithSummary("Get Pokemon details by id")
             .Produces(StatusCodes.Status200OK, typeof(PokemonDetailsResponse))
-            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesValidationProblem()
             .ProducesProblem(StatusCodes.Status404NotFound);
 
         return group;

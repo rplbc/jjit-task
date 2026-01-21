@@ -14,7 +14,7 @@ public static class TrainerEndpoints
             .WithName("RegisterTrainer")
             .WithSummary("Register a trainer")
             .Produces(StatusCodes.Status201Created, typeof(RegisterTrainerResponse))
-            .ProducesProblem(StatusCodes.Status400BadRequest);
+            .ProducesValidationProblem();
 
         return group;
     }
