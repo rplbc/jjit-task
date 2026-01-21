@@ -1,8 +1,8 @@
 using System.Text.Json.Serialization;
 
-namespace PokemonApi.Models;
+namespace PokemonApi.Contracts.Responses;
 
-public sealed class PokemonDetailsModel
+public sealed class PokemonDetailsResponse
 {
     public int Id { get; init; }
 

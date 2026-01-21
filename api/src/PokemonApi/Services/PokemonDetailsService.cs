@@ -1,6 +1,6 @@
 using System.Net;
 using Microsoft.Extensions.Caching.Memory;
-using PokemonApi.Models;
+using PokemonApi.Contracts.Responses;
 
 namespace PokemonApi.Services;
 
@@ -23,10 +23,10 @@ public sealed class PokemonDetailsService : IPokemonDetailsService
         _cache = cache;
     }
 
-    public async Task<PokemonDetailsModel?> GetPokemonAsync(int id)
+    public async Task<PokemonDetailsResponse?> GetPokemonAsync(int id)
     {
         var cacheKey = $"pokemon:{id}";
-        if (_cache.TryGetValue(cacheKey, out PokemonDetailsModel? cached))
+        if (_cache.TryGetValue(cacheKey, out PokemonDetailsResponse? cached))
         {
             return cached;
         }
@@ -40,13 +40,13 @@ public sealed class PokemonDetailsService : IPokemonDetailsService
 
         response.EnsureSuccessStatusCode();
 
-        var payload = await response.Content.ReadFromJsonAsync<PokeApiPokemon>();
+        var payload = await response.Content.ReadFromJsonAsync<PokeApiPokemonResponse>();
         if (payload == null)
         {
             return null;
         }
 
-        var details = new PokemonDetailsModel
+        var details = new PokemonDetailsResponse
         {
             Id = payload.Id,
             Name = payload.Name,

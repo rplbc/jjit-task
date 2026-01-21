@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using PokemonApi.Models;
+using PokemonApi.Contracts.Requests;
+using PokemonApi.Contracts.Responses;
 
 namespace PokemonApi.Endpoints;
 
@@ -12,16 +13,16 @@ public static class TrainerEndpoints
             .WithTags("Trainer")
             .WithName("RegisterTrainer")
             .WithSummary("Register a trainer")
-            .Produces(StatusCodes.Status201Created, typeof(TrainerRegistrationResponse))
+            .Produces(StatusCodes.Status201Created, typeof(RegisterTrainerResponse))
             .ProducesProblem(StatusCodes.Status400BadRequest);
 
         return group;
     }
 
-    internal static IResult RegisterTrainer([FromBody] TrainerRegistrationRequest request)
+    internal static IResult RegisterTrainer([FromBody] RegisterTrainerRequest request)
     {
         var id = Guid.NewGuid().ToString("N");
-        var response = new TrainerRegistrationResponse(
+        var response = new RegisterTrainerResponse(
             id,
             request.Name.Trim(),
             request.Age,

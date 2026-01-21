@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using PokemonApi.Models;
+using PokemonApi.Contracts.Requests;
+using PokemonApi.Contracts.Responses;
 using PokemonApi.Services;
 
 namespace PokemonApi.Endpoints;
@@ -13,7 +14,7 @@ public static class PokemonEndpoints
             .WithTags("Pokemon")
             .WithName("GetPokemon")
             .WithSummary("Get Pokemon details by id")
-            .Produces(StatusCodes.Status200OK, typeof(PokemonDetailsModel))
+            .Produces(StatusCodes.Status200OK, typeof(PokemonDetailsResponse))
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status404NotFound);
 
@@ -22,7 +23,7 @@ public static class PokemonEndpoints
 
     internal static async Task<IResult> GetPokemonAsync(
         [FromServices] IPokemonDetailsService pokemonService,
-        [AsParameters] PokemonRequest request
+        [AsParameters] GetPokemonRequest request
     )
     {
         var pokemon = await pokemonService.GetPokemonAsync(request.Id);

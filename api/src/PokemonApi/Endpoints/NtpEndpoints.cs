@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using PokemonApi.Models;
+using PokemonApi.Contracts.Responses;
 using PokemonApi.Services;
 
 namespace PokemonApi.Endpoints;
@@ -13,7 +13,7 @@ public static class NtpEndpoints
             .WithTags("Ntp")
             .WithName("GetTime")
             .WithSummary("Get network time")
-            .Produces(StatusCodes.Status200OK, typeof(TimeResponse))
+            .Produces(StatusCodes.Status200OK, typeof(GetTimeResponse))
             .ProducesProblem(StatusCodes.Status500InternalServerError);
 
         return group;
@@ -22,6 +22,6 @@ public static class NtpEndpoints
     internal static async Task<IResult> GetTimeAsync([FromServices] INtpService ntpService)
     {
         var time = await ntpService.GetNetworkTimeAsync();
-        return TypedResults.Ok(new TimeResponse(time));
+        return TypedResults.Ok(new GetTimeResponse(time));
     }
 }

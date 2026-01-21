@@ -1,8 +1,8 @@
-using PokemonApi.Models;
+using PokemonApi.Contracts.Responses;
 
 namespace PokemonApi.Services;
 
 public interface IPokemonDetailsService
 {
-    Task<PokemonDetailsModel?> GetPokemonAsync(int id);
+    Task<PokemonDetailsResponse?> GetPokemonAsync(int id);
 }

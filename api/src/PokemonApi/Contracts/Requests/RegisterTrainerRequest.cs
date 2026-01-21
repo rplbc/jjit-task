@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace PokemonApi.Models;
+namespace PokemonApi.Contracts.Requests;
 
-public sealed class TrainerRegistrationRequest
+public sealed class RegisterTrainerRequest
 {
     [Required]
     [MinLength(2)]

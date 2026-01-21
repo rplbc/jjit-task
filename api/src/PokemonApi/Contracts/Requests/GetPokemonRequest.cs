@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 
-namespace PokemonApi.Models;
+namespace PokemonApi.Contracts.Requests;
 
-public sealed class PokemonRequest
+public sealed class GetPokemonRequest
 {
     [FromQuery(Name = "id")]
     [Range(1, int.MaxValue)]

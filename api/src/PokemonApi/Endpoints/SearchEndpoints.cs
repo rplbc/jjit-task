@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using PokemonApi.Models;
+using PokemonApi.Contracts.Requests;
+using PokemonApi.Contracts.Responses;
 using PokemonApi.Services;
 
 namespace PokemonApi.Endpoints;
@@ -13,7 +14,7 @@ public static class SearchEndpoints
             .WithTags("Pokemon")
             .WithName("SearchPokemon")
             .WithSummary("Search for Pokemon by name using fuzzy matching")
-            .Produces(StatusCodes.Status200OK, typeof(PokemonSummary[]))
+            .Produces(StatusCodes.Status200OK, typeof(PokemonSummaryResponse[]))
             .ProducesProblem(StatusCodes.Status400BadRequest);
 
         return group;
@@ -21,7 +22,7 @@ public static class SearchEndpoints
 
     internal static IResult Search(
         [FromServices] IPokemonSearchService searchService,
-        [AsParameters] SearchRequest request
+        [AsParameters] SearchPokemonRequest request
     )
     {
         var results = searchService.Search(request.Q.Trim().ToLowerInvariant());

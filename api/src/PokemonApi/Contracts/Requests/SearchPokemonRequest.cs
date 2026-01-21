@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 
-namespace PokemonApi.Models;
+namespace PokemonApi.Contracts.Requests;
 
-public sealed class SearchRequest
+public sealed class SearchPokemonRequest
 {
     [FromQuery(Name = "q")]
     [Required]

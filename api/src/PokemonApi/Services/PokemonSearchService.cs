@@ -1,14 +1,14 @@
 using System.Collections.Frozen;
 using System.Text.Json;
 using FuzzySharp;
-using PokemonApi.Models;
+using PokemonApi.Contracts.Responses;
 
 namespace PokemonApi.Services;
 
 public class PokemonSearchService : IPokemonSearchService
 {
     private readonly IReadOnlyList<string> _names;
-    private readonly IReadOnlyDictionary<string, PokemonSummary> _pokemonByName;
+    private readonly IReadOnlyDictionary<string, PokemonSummaryResponse> _pokemonByName;
 
     public PokemonSearchService(IWebHostEnvironment environment)
     {
@@ -29,7 +29,7 @@ public class PokemonSearchService : IPokemonSearchService
         );
     }
 
-    public IReadOnlyList<PokemonSummary> Search(string query, int limit = 10)
+    public IReadOnlyList<PokemonSummaryResponse> Search(string query, int limit = 10)
     {
         return Process
             .ExtractTop(query, _names, limit: limit)
@@ -38,5 +38,5 @@ public class PokemonSearchService : IPokemonSearchService
             .ToArray();
     }
 
-    private record PokemonPayload(List<PokemonSummary> Data);
+    private record PokemonPayload(List<PokemonSummaryResponse> Data);
 }
