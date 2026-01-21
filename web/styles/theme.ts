@@ -18,13 +18,6 @@ declare module '@mui/material/Button' {
   }
 }
 
-declare module '@mui/material/Chip' {
-  interface ChipPropsVariantOverrides {
-    soft: true;
-    softPrimary: true;
-  }
-}
-
 declare module '@mui/material/styles' {
   interface Theme {
     appShadows: {

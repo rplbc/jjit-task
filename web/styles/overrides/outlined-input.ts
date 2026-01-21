@@ -31,16 +31,6 @@ export const MuiOutlinedInput: Components<Theme>['MuiOutlinedInput'] = {
       },
     }),
   },
-  variants: [
-    {
-      props: { size: 'medium' },
-      style: {
-        '& .MuiOutlinedInput-input': {
-          padding: '14px 10px',
-        },
-      },
-    },
-  ],
   defaultProps: {
     notched: false,
   },
