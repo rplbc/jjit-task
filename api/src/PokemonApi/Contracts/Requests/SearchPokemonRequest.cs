@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace PokemonApi.Contracts.Requests;
 
-public sealed class SearchPokemonRequest
+public class SearchPokemonRequest
 {
     [FromQuery(Name = "q")]
     [Required]

@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace PokemonApi.Contracts.Responses;
 
-internal sealed record PokeApiPokemonResponse(
+public record PokeApiPokemonResponse(
     int Id,
     string Name,
     [property: JsonPropertyName("base_experience")] int BaseExperience,
@@ -10,10 +10,10 @@ internal sealed record PokeApiPokemonResponse(
     List<PokeApiTypeSlotResponse>? Types = null
 );
 
-internal sealed record PokeApiSpritesResponse(
+public record PokeApiSpritesResponse(
     [property: JsonPropertyName("front_default")] string? FrontDefault
 );
 
-internal sealed record PokeApiTypeSlotResponse(PokeApiTypeResponse Type);
+public record PokeApiTypeSlotResponse(PokeApiTypeResponse Type);
 
-internal sealed record PokeApiTypeResponse(string Name);
+public record PokeApiTypeResponse(string Name);

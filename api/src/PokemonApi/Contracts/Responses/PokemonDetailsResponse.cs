@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace PokemonApi.Contracts.Responses;
 
-public sealed class PokemonDetailsResponse
+public class PokemonDetailsResponse
 {
     public int Id { get; init; }
 

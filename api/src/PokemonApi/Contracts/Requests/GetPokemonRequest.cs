@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace PokemonApi.Contracts.Requests;
 
-public sealed class GetPokemonRequest
+public class GetPokemonRequest
 {
     [FromQuery(Name = "id")]
     [Range(1, 589)]

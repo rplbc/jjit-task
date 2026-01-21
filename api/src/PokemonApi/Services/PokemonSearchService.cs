@@ -32,7 +32,7 @@ public class PokemonSearchService : IPokemonSearchService
     public IReadOnlyList<PokemonSummaryResponse> Search(string query, int limit = 10)
     {
         return Process
-            .ExtractTop(query, _names, limit: limit)
+            .ExtractTop(query.Trim().ToLowerInvariant(), _names, limit: limit)
             .Where(m => m.Score >= 50)
             .Select(m => _pokemonByName[m.Value])
             .ToArray();

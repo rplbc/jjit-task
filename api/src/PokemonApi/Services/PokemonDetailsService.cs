@@ -4,7 +4,7 @@ using PokemonApi.Contracts.Responses;
 
 namespace PokemonApi.Services;
 
-public sealed class PokemonDetailsService : IPokemonDetailsService
+public class PokemonDetailsService : IPokemonDetailsService
 {
     private static readonly TimeSpan CacheDuration = TimeSpan.FromHours(1);
     private readonly HttpClient _httpClient;
