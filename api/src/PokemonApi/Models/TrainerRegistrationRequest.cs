@@ -14,5 +14,6 @@ public sealed class TrainerRegistrationRequest
 
     [Required]
     [MinLength(1)]
+    [PokemonName]
     public string Pokemon { get; init; } = string.Empty;
 }

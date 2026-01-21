@@ -38,5 +38,10 @@ public class PokemonSearchService : IPokemonSearchService
             .ToArray();
     }
 
+    public PokemonSummary? GetByName(string name)
+    {
+        return _pokemonByName.TryGetValue(name, out var pokemon) ? pokemon : null;
+    }
+
     private record PokemonPayload(List<PokemonSummary> Data);
 }
