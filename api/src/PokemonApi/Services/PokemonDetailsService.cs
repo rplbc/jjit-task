@@ -32,9 +32,9 @@ public sealed class PokemonDetailsService : IPokemonDetailsService
         }
 
         var response = await _httpClient.GetAsync($"pokemon/{id}");
-
         if (response.StatusCode == HttpStatusCode.NotFound)
         {
+            _cache.Set<PokemonDetailsResponse?>(cacheKey, null, CacheDuration);
             return null;
         }
 
