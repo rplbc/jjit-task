@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PokemonApi.Contracts.Requests;
 using PokemonApi.Contracts.Responses;
+using PokemonApi.Services;
 
 namespace PokemonApi.Endpoints;
 
@@ -19,15 +20,21 @@ public static class TrainerEndpoints
         return group;
     }
 
-    internal static IResult RegisterTrainer([FromBody] RegisterTrainerRequest request)
+    internal static IResult RegisterTrainer(
+        [FromBody] RegisterTrainerRequest request,
+        [FromServices] IPokemonSearchService pokemonSearchService
+    )
     {
+        if (!pokemonSearchService.ExistsByName(request.Pokemon))
+            return TypedResults.ValidationProblem(
+                new Dictionary<string, string[]>
+                {
+                    { "Pokemon", new[] { $"Pokemon '{request.Pokemon}' does not exist." } },
+                }
+            );
+
         var id = Guid.NewGuid().ToString("N");
-        var response = new RegisterTrainerResponse(
-            id,
-            request.Name.Trim(),
-            request.Age,
-            request.Pokemon.Trim()
-        );
+        var response = new RegisterTrainerResponse(id, request.Name, request.Age, request.Pokemon);
 
         return TypedResults.Created($"/api/trainer/{id}", response);
     }

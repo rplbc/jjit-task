@@ -6,6 +6,6 @@ namespace PokemonApi.Contracts.Requests;
 public sealed class GetPokemonRequest
 {
     [FromQuery(Name = "id")]
-    [Range(1, int.MaxValue)]
+    [Range(1, 589)]
     public int Id { get; init; }
 }

@@ -25,7 +25,7 @@ public static class SearchEndpoints
         [AsParameters] SearchPokemonRequest request
     )
     {
-        var results = searchService.Search(request.Q.Trim().ToLowerInvariant());
+        var results = searchService.Search(request.Q.ToLowerInvariant());
         return TypedResults.Ok(results);
     }
 }

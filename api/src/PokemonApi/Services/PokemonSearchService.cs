@@ -38,5 +38,10 @@ public class PokemonSearchService : IPokemonSearchService
             .ToArray();
     }
 
+    public bool ExistsByName(string name)
+    {
+        return _pokemonByName.ContainsKey(name);
+    }
+
     private record PokemonPayload(List<PokemonSummaryResponse> Data);
 }
