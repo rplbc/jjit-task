@@ -22,7 +22,6 @@ public class PokemonSearchService : IPokemonSearchService
                 ?.Data
             ?? throw new InvalidOperationException("Failed to deserialize pokemon.json");
 
-
         _names = data.Select(pokemon => pokemon.Name).ToArray();
         _pokemonByName = data.ToFrozenDictionary(
             pokemon => pokemon.Name,
