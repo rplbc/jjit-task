@@ -21,7 +21,7 @@ docker compose up --build
 
 - Web: `http://localhost:3000`
 - API: `http://localhost:5189`
-- API docs (Development only): `http://localhost:5189/openapi`
+- API docs (Development only): `http://localhost:5189/scalar`
 
 ## Run (Local)
 
