@@ -12,8 +12,6 @@ public sealed class TrainerRegistrationRequest
     [Range(16, 99)]
     public int Age { get; init; }
 
-    [Required]
-    [MinLength(1)]
     [PokemonName]
     public string Pokemon { get; init; } = string.Empty;
 }
